@@ -1,0 +1,200 @@
+CREATE DATABASE OnlineComplaintSystem;
+USE OnlineComplaintSystem;
+2. Roles Table
+CREATE TABLE Roles (
+    roleId INT PRIMARY KEY AUTO_INCREMENT,
+    roleType VARCHAR(50) NOT NULL
+);
+3. User Table
+CREATE TABLE User (
+    userId INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    alt_email VARCHAR(255),
+    password VARCHAR(255) NOT NULL,
+    roleId INT,
+    FOREIGN KEY (roleId) REFERENCES Roles(roleId)
+);
+4. User Phone Table
+CREATE TABLE User_Phone_No (
+    phone_no BIGINT NOT NULL,
+    userId INT,
+    FOREIGN KEY (userId) REFERENCES User(userId)
+);
+5. Complainant Table
+CREATE TABLE Complainant (
+    nationalID BIGINT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(255)
+);
+6. Complainant Gender Table
+CREATE TABLE Complainant_Gender (
+    gender VARCHAR(10),
+    nationalID BIGINT,
+    FOREIGN KEY (nationalID) REFERENCES Complainant(nationalID)
+);
+7. Complainant Mobile Table
+CREATE TABLE Complainant_Mobile (
+    mobile BIGINT NOT NULL,
+    nationalID BIGINT,
+    FOREIGN KEY (nationalID) REFERENCES Complainant(nationalID)
+);
+8. Governorates Table
+CREATE TABLE Governorates (
+    governID INT PRIMARY KEY AUTO_INCREMENT,
+    governName VARCHAR(255) NOT NULL
+);
+9. Regions Table
+CREATE TABLE Regions (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    regionName VARCHAR(255) NOT NULL,
+    governID INT,
+    FOREIGN KEY (governID) REFERENCES Governorates(governID)
+);
+10. Marital Status Table
+CREATE TABLE MaritalStatus (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    type VARCHAR(50) NOT NULL
+);
+11. Complaint Table
+CREATE TABLE Complaint (
+    complaintID INT PRIMARY KEY AUTO_INCREMENT,
+    complaintNumber VARCHAR(50) UNIQUE,
+    complaintDesc TEXT NOT NULL,
+    complaintDate DATE NOT NULL,
+    nationalID BIGINT,
+    FOREIGN KEY (nationalID) REFERENCES Complainant(nationalID)
+);
+12. Status Table
+CREATE TABLE Status (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    statusType VARCHAR(50) NOT NULL
+);
+13. Complaint Status Table
+CREATE TABLE ComplaintStatus (
+    statusId INT PRIMARY KEY AUTO_INCREMENT,
+    complaintID INT,
+    userId INT,
+    id INT,
+    FOREIGN KEY (complaintID) REFERENCES Complaint(complaintID),
+    FOREIGN KEY (userId) REFERENCES User(userId),
+    FOREIGN KEY (id) REFERENCES Status(id)
+);
+14. FollowUp Table
+CREATE TABLE FollowUp (
+    followupID INT PRIMARY KEY AUTO_INCREMENT,
+    followupDate DATE,
+    complaintID INT,
+    FOREIGN KEY (complaintID) REFERENCES Complaint(complaintID)
+);
+15. Complaint Causes Table
+CREATE TABLE ComplaintCauses (
+    causeID INT PRIMARY KEY AUTO_INCREMENT,
+    causeName VARCHAR(255) NOT NULL,
+    complaintID INT,
+    FOREIGN KEY (complaintID) REFERENCES Complaint(complaintID)
+);
+16. Complaint Actions Table
+CREATE TABLE ComplaintActions (
+    complaintActionID INT PRIMARY KEY AUTO_INCREMENT,
+    actions TEXT NOT NULL,
+    complaintID INT,
+    FOREIGN KEY (complaintID) REFERENCES Complaint(complaintID)
+);
+17. Questions Table
+CREATE TABLE Questions (
+    qID INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL
+);
+18. Answers Table
+CREATE TABLE Answers (
+    ansID INT PRIMARY KEY AUTO_INCREMENT,
+    qID INT,
+    FOREIGN KEY (qID) REFERENCES Questions(qID)
+);
+19. Site Survey Table
+CREATE TABLE SiteSurvey (
+    surveyID INT PRIMARY KEY AUTO_INCREMENT,
+    date DATE,
+    nationalID BIGINT,
+    FOREIGN KEY (nationalID) REFERENCES Complainant(nationalID)
+);
+
+
+1. Roles
+INSERT INTO Roles (roleType) VALUES
+('Admin'),
+('Officer'),
+('Citizen');
+2. User
+INSERT INTO User (username, email, alt_email, password, roleId) VALUES
+('admin1', 'admin@gmail.com', NULL, 'admin@123', 1),
+('officer1', 'officer@gmail.com', NULL, 'officer@123', 2),
+('citizen1', 'citizen@gmail.com', NULL, 'citizen@123', 3);
+3. User Phone Number
+INSERT INTO User_Phone_No (phone_no, userId) VALUES
+(9876543210, 1),
+(9876543220, 2),
+(9876543230, 3);
+4. Governorates
+INSERT INTO Governorates (governName) VALUES
+('Tamil Nadu'),
+('Kerala');
+5. Regions
+INSERT INTO Regions (regionName, governID) VALUES
+('Chennai', 1),
+('Coimbatore', 1),
+('Kochi', 2);
+6. Marital Status
+INSERT INTO MaritalStatus (type) VALUES
+('Single'),
+('Married');
+7. Complainant
+INSERT INTO Complainant (nationalID, name, address) VALUES
+(123456789012, 'Ravi Kumar', 'Chennai'),
+(987654321098, 'Anita Sharma', 'Kochi');
+8. Complainant Gender
+INSERT INTO Complainant_Gender (gender, nationalID) VALUES
+('Male', 123456789012),
+('Female', 987654321098);
+9. Complainant Mobile
+INSERT INTO Complainant_Mobile (mobile, nationalID) VALUES
+(9998887776, 123456789012),
+(8887776665, 987654321098);
+10. Complaint
+INSERT INTO Complaint (complaintNumber, complaintDesc, complaintDate, nationalID) VALUES
+('CMP001', 'Street light not working', '2025-02-01', 123456789012),
+('CMP002', 'Water leakage issue', '2025-02-02', 987654321098);
+11. Status
+INSERT INTO Status (statusType) VALUES
+('Registered'),
+('In Progress'),
+('Resolved');
+12. Complaint Status
+INSERT INTO ComplaintStatus (complaintID, userId, id) VALUES
+(1, 2, 1),
+(2, 2, 2);
+13. FollowUp
+INSERT INTO FollowUp (followupDate, complaintID) VALUES
+('2025-02-03', 1),
+('2025-02-04', 2);
+14. Complaint Causes
+INSERT INTO ComplaintCauses (causeName, complaintID) VALUES
+('Electrical Maintenance', 1),
+('Water Supply Issue', 2);
+15. Complaint Actions
+INSERT INTO ComplaintActions (actions, complaintID) VALUES
+('Assigned to electrical department', 1),
+('Pipeline repair initiated', 2);
+16. Questions
+INSERT INTO Questions (title) VALUES
+('Are you satisfied with the resolution?'),
+('Was the response time adequate?');
+17. Answers
+INSERT INTO Answers (qID) VALUES
+(1),
+(2);
+18. Site Survey
+INSERT INTO SiteSurvey (date, nationalID) VALUES
+('2025-02-05', 123456789012),
+('2025-02-06', 987654321098);
