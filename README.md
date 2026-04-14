@@ -18,6 +18,6 @@ Backend: Node.js / PHP / Java
 Database: MySQL
 
 TO run this:
--Copy path till the civicdesk-backend and do cd path on cmd
+-Copy path till the civicdesk and do cd path on cmd
 - npm install
 - npm start
